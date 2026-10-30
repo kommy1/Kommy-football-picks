@@ -1,175 +1,29 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#07140f">
-<title>KOMMY FOOTBALL PICKS</title>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#07140f"><title>KOMMY FOOTBALL PICKS</title>
 <style>
-:root{--bg:#07140f;--panel:#10251b;--panel2:#142e22;--gold:#e7c45a;--text:#f3f7f4;--muted:#a8bbb0;--line:#294537;--green:#3fc27b;--red:#ff7a7a}
-*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#07140f,#0b2117 55%,#07140f);color:var(--text);font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif}
-.wrap{max-width:1120px;margin:auto;padding:18px}.top{display:flex;gap:14px;align-items:center;justify-content:space-between;flex-wrap:wrap;padding:12px 0 20px}
-.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:14px;background:var(--gold);color:#102017;display:grid;place-items:center;font-weight:1000;font-size:21px}.brand h1{font-size:clamp(19px,4vw,27px);margin:0;letter-spacing:.4px}.brand p{margin:2px 0 0;color:var(--muted);font-size:13px}
-.pill{border:1px solid var(--line);border-radius:999px;padding:8px 12px;color:var(--muted);font-size:12px;display:flex;align-items:center;gap:8px}.dot{width:8px;height:8px;border-radius:50%;background:var(--green);display:inline-block}
-.hero{background:linear-gradient(130deg,#173b28,#10251b 70%);border:1px solid var(--line);border-radius:22px;padding:22px;margin-bottom:18px}.hero h2{margin:0 0 6px;font-size:clamp(22px,4vw,32px)}.hero p{color:var(--muted);margin:0 0 15px;max-width:720px}
-.actions{display:flex;gap:10px;flex-wrap:wrap}button,select{font:inherit;border-radius:12px;border:1px solid var(--line);padding:11px 14px;background:#0b1b13;color:var(--text)}button{cursor:pointer;font-weight:700}button.primary{background:var(--gold);color:#172016;border-color:var(--gold)}button:disabled{opacity:.6;cursor:wait}
-.metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}.metric{background:var(--panel);border:1px solid var(--line);border-radius:15px;padding:14px}.metric b{font-size:22px;display:block}.metric span{font-size:12px;color:var(--muted)}
-.section-head{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap;margin:24px 0 12px}.section-head h2{margin:0;font-size:21px}.section-head p{margin:3px 0 0;color:var(--muted);font-size:13px}
-.filters{display:flex;gap:8px;flex-wrap:wrap}.filters select{max-width:100%;font-size:14px}
-.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.match{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:16px;min-width:0}.match-top{display:flex;justify-content:space-between;align-items:center;gap:8px;color:var(--muted);font-size:12px;margin-bottom:14px}.league{color:var(--gold);font-weight:800}.status{border-radius:999px;padding:4px 8px;background:#1b3a2a;color:#bdebd0;font-weight:700;white-space:nowrap}.status.live{background:#4a2020;color:#ffc1c1}.teams{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:8px;align-items:center}.team{text-align:center;min-width:0}.team-name{font-weight:800;overflow-wrap:anywhere}.team small{display:block;color:var(--muted);font-size:12px;margin-top:5px}.score{font-size:22px;font-weight:900;white-space:nowrap}.time{text-align:center;color:var(--gold);font-weight:800;margin-top:13px;font-size:13px}.meta{border-top:1px solid var(--line);margin-top:13px;padding-top:10px;display:flex;justify-content:space-between;gap:10px;color:var(--muted);font-size:12px}
-.empty,.notice{padding:18px;border:1px dashed var(--line);border-radius:15px;color:var(--muted);background:#0a1b12}.notice{margin:14px 0;border-style:solid}.notice strong{color:var(--gold)}.foot{color:var(--muted);font-size:12px;padding:24px 0 10px}.foot a{color:var(--gold)}.loading{color:var(--gold)}.error{color:#ffb3b3}
-@media(max-width:700px){.wrap{padding:13px}.cards{grid-template-columns:1fr}.metrics{grid-template-columns:repeat(3,minmax(0,1fr))}.metric{padding:11px 9px}.metric b{font-size:19px}.hero{padding:17px}.top{align-items:flex-start}.pill{font-size:11px}}
-</style>
-</head>
-<body>
-<div class="wrap">
-<header class="top">
-  <div class="brand"><div class="logo">K</div><div><h1>KOMMY FOOTBALL PICKS</h1><p>Real fixtures • Live scores • Automatic refresh</p></div></div>
-  <div class="pill"><span class="dot"></span><span id="connection">Connecting to live football data…</span></div>
-</header>
-<section class="hero">
-  <h2>Today's football, updated automatically.</h2>
-  <p>Fixtures, kickoff times, match status and scores are loaded online from ESPN's public scoreboard feeds. Times are shown in your device's local timezone. This page refreshes automatically every five minutes.</p>
-  <div class="actions"><button class="primary" id="refresh">↻ Refresh now</button><button id="todayBtn">Show today's matches</button></div>
-</section>
-<div class="metrics">
-  <div class="metric"><b id="countMatches">—</b><span>Matches loaded</span></div>
-  <div class="metric"><b id="liveMatches">—</b><span>Live now</span></div>
-  <div class="metric"><b id="updatedAt">—</b><span>Last update</span></div>
-</div>
-<div class="notice"><strong>Important:</strong> Real fixtures and scores update automatically, but this version does not invent betting odds or claim guaranteed predictions. Live odds and a genuine five-pick slip require a licensed odds/statistics data provider and its API access.</div>
-<div class="section-head">
-  <div><h2 id="listTitle">Upcoming & live matches</h2><p id="subTitle">Loading current fixtures…</p></div>
-  <div class="filters">
-    <select id="leagueFilter" aria-label="Filter competition"><option value="all">All competitions</option></select>
-    <select id="dateFilter" aria-label="Filter match date"><option value="today">Today</option><option value="all">All loaded dates</option></select>
-  </div>
-</div>
-<div id="matches" class="cards"><div class="empty loading">Fetching current fixtures online…</div></div>
-<div class="foot">
-  Data source: ESPN public scoreboard endpoints. Availability and coverage depend on the competition feed and internet access. Kickoff times are converted to your device's timezone. For production use, connect a licensed football data/odds API and check its terms of use.
-  <br><span id="nextRefresh">Auto-refresh is enabled.</span>
-</div>
-</div>
+:root{--bg:#07140f;--p:#10251b;--g:#e7c45a;--t:#f4f8f5;--m:#a9bbb0;--l:#2a4939;--green:#55c98a}*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#07140f,#0b2117,#07140f);color:var(--t);font:15px/1.5 system-ui,Arial}.wrap{max-width:1100px;margin:auto;padding:15px}.head{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}.brand{display:flex;gap:11px;align-items:center}.logo{width:50px;height:50px;border-radius:15px;background:linear-gradient(145deg,#f7dc7b,#b88c25);color:#102016;display:grid;place-items:center;font-size:25px;font-weight:1000}.brand h1{font-size:clamp(18px,4vw,26px);margin:0}.brand p,.muted,.small{color:var(--m);font-size:12px;margin:2px 0}.online{border:1px solid var(--l);border-radius:30px;padding:7px 10px;color:var(--m);font-size:12px}nav{display:flex;gap:7px;overflow:auto;padding:15px 0;border-bottom:1px solid var(--l)}button,select,input,textarea{font:inherit}button{background:#0b1b13;color:var(--t);border:1px solid var(--l);border-radius:10px;padding:10px 13px;font-weight:700;cursor:pointer;white-space:nowrap}button.active,button.primary{background:var(--g);color:#142016;border-color:var(--g)}.hero,.panel,.card{background:var(--p);border:1px solid var(--l);border-radius:17px;padding:16px;margin:14px 0}.hero{background:linear-gradient(130deg,#173c29,#10251b)}.hero h2{margin:0 0 5px;font-size:26px}.hero p{color:var(--m);margin:0}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}.stat{background:var(--p);border:1px solid var(--l);border-radius:13px;padding:11px}.stat b{display:block;font-size:21px}.stat span{font-size:12px;color:var(--m)}.page{display:none}.page.active{display:block}.section{display:flex;justify-content:space-between;align-items:end;gap:10px;flex-wrap:wrap;margin:22px 0 10px}.section h2{margin:0;font-size:21px}.cards{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card{margin:0;min-width:0}.card.featured{border-color:#927a34}.tag{color:#c9efd8;background:#1c3b2a;border-radius:30px;padding:4px 8px;font-size:12px}.tag.live{background:#4a2020;color:#ffcaca}.line{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;color:var(--m);font-size:12px}.league,.gold{color:var(--g);font-weight:800}.teams{display:grid;grid-template-columns:1fr auto 1fr;gap:7px;align-items:center;text-align:center;margin:17px 0}.team{font-weight:800;overflow-wrap:anywhere}.score{font-size:21px;font-weight:900}.kick{text-align:center;color:var(--g);font-weight:800;font-size:13px}.analysis{margin-top:12px;padding:11px;border-radius:10px;background:#091a11;color:var(--m);font-size:13px}.analysis b{color:var(--g)}select,input,textarea{background:#091a11;color:var(--t);border:1px solid var(--l);border-radius:10px;padding:10px;max-width:100%}.notice{border:1px solid var(--l);background:#0b1b13;border-radius:12px;padding:12px;color:var(--m);font-size:13px;margin:14px 0}.notice strong{color:var(--g)}.form{display:grid;gap:10px;max-width:600px}.form input,.form textarea{width:100%}.footer{border-top:1px solid var(--l);padding:18px 0;color:var(--m);font-size:12px;margin-top:25px}@media(max-width:680px){.cards{grid-template-columns:1fr}.wrap{padding:12px}.hero h2{font-size:23px}}
+</style></head><body><main class="wrap">
+<header class="head"><div class="brand"><div class="logo">K</div><div><h1>KOMMY FOOTBALL PICKS</h1><p>FOOTBALL DATA • FORM • MATCH CENTRE</p></div></div><div class="online" id="connection">● Connecting…</div></header>
+<nav><button class="active" data-page="home">Home</button><button data-page="matches">Matches</button><button data-page="form">Team form</button><button data-page="about">About</button><button data-page="contact">Contact</button></nav>
+<div class="hero"><h2>Know the game. Read the numbers.</h2><p>Fixtures, live scores when available, recent form, head-to-head history and transparent match analysis.</p><p style="margin-top:12px"><button class="primary" id="refresh">↻ Refresh data</button> <span class="small" id="updated">Waiting for data…</span></p></div>
+<div class="stats"><div class="stat"><b id="count">—</b><span>Fixtures loaded</span></div><div class="stat"><b id="liveCount">—</b><span>Live matches</span></div><div class="stat"><b id="featCount">—</b><span>Daily features</span></div></div>
+<div class="notice"><strong>Data transparency:</strong> Fixtures and scores use public ESPN scoreboard feeds. The five featured games are the next available fixtures, not guaranteed winners. Analysis is a simple form-based summary, not a certainty. No betting odds are generated.</div>
+<section class="page active" id="home"><div class="section"><div><h2>Today's five featured matches</h2><p class="muted">Automatically selected from upcoming fixtures.</p></div></div><div id="featured" class="cards"><div class="panel">Loading fixtures…</div></div><div class="section"><h2>Live matches</h2></div><div id="live" class="cards"></div></section>
+<section class="page" id="matches"><div class="section"><div><h2>Fixtures and results</h2><p class="muted">Times are converted to your device timezone.</p></div><select id="league"><option value="all">All competitions</option></select><select id="date"><option value="today">Today</option><option value="all">All loaded dates</option></select></div><div id="all" class="cards"></div></section>
+<section class="page" id="form"><div class="section"><div><h2>Team form and recent results</h2><p class="muted">Choose a team to inspect its recent results.</p></div><select id="team"><option value="">Select a team</option></select></div><div class="panel" id="teamInfo">Select a team.</div></section>
+<section class="page" id="about"><div class="panel"><h2 class="gold">About KOMMY FOOTBALL PICKS</h2><p class="muted">A football information project for fans who want fixtures, match status, recent form, head-to-head records and clear match previews.</p><p class="muted">Creator: Kommy</p><h3 class="gold">How analysis works</h3><p class="muted">The site compares recent results, points per match, goals scored and conceded, plus previous meetings found in the available feed. When data is missing, it says so instead of inventing statistics.</p></div></section>
+<section class="page" id="contact"><div class="panel"><h2 class="gold">Contact KOMMY</h2><p class="muted">Send feedback or suggest a competition. Add the site owner's email in the CONTACT_EMAIL setting in index.html before publishing.</p><form class="form" id="contactForm"><label>Your name<input id="sender" required></label><label>Your email<input id="email" type="email" required></label><label>Message<textarea id="message" rows="4" required></textarea></label><button class="primary">Open email app</button></form></div></section>
+<footer class="footer">© <span id="year"></span> KOMMY FOOTBALL PICKS · Football information and educational analysis. Data coverage varies by competition. Live statistics such as possession and shots require a dedicated provider.</footer></main>
 <script>
-(() => {
-  const leagues = [
-    ["eng.1","English Premier League"],["esp.1","Spanish La Liga"],
-    ["ger.1","German Bundesliga"],["ita.1","Italian Serie A"],
-    ["fra.1","French Ligue 1"],["uefa.champions","UEFA Champions League"],
-    ["uefa.europa","UEFA Europa League"],["usa.1","MLS"],
-    ["mex.1","Liga MX"],["bra.1","Brazil Serie A"],["arg.1","Argentina Liga Profesional"],
-    ["ned.1","Dutch Eredivisie"],["por.1","Portuguese Primeira Liga"]
-  ];
-  const $ = id => document.getElementById(id);
-  let allMatches = [], lastUpdated = null, timer = null;
-  const localDateKey = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
-  const fmtTime = d => new Intl.DateTimeFormat(undefined,{hour:'2-digit',minute:'2-digit'}).format(d);
-  const fmtDate = d => new Intl.DateTimeFormat(undefined,{weekday:'short',month:'short',day:'numeric'}).format(d);
-  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  function parseEvent(event, leagueName) {
-    const comp = event.competitions?.[0];
-    const competitors = comp?.competitors || [];
-    const home = competitors.find(t => t.homeAway === 'home') || competitors[0];
-    const away = competitors.find(t => t.homeAway === 'away') || competitors[1];
-    if (!home || !away) return null;
-    const date = new Date(event.date || comp?.date);
-    if (Number.isNaN(date.getTime())) return null;
-    const state = comp?.status?.type || event.status?.type || {};
-    const completed = !!state.completed;
-    const live = state.state === 'in';
-    const status = live ? (state.shortDetail || state.detail || 'LIVE') : completed ? 'FT' : (state.shortDetail || fmtTime(date));
-    const score = live || completed || competitors.some(t => t.score != null)
-      ? `${home.score ?? '0'} - ${away.score ?? '0'}` : 'VS';
-    return {
-      id: event.id || `${leagueName}-${date.toISOString()}-${home.team.id}-${away.team.id}`,
-      league: leagueName, date, home: home.team.displayName || home.team.name || 'Home team',
-      away: away.team.displayName || away.team.name || 'Away team',
-      homeRecord: home.records?.[0]?.summary || '', awayRecord: away.records?.[0]?.summary || '',
-      status, live, completed, score, venue: comp?.venue?.fullName || '',
-      detail: event.name || `${home.team.name} vs ${away.team.name}`
-    };
-  }
-  async function fetchLeague(code, name) {
-    const url = `https://site.api.espn.com/apis/site/v2/sports/soccer/${encodeURIComponent(code)}/scoreboard`;
-    const response = await fetch(url, {cache:'no-store'});
-    if (!response.ok) throw new Error(`${name}: HTTP ${response.status}`);
-    const data = await response.json();
-    return (data.events || []).map(e => parseEvent(e, name)).filter(Boolean);
-  }
-  async function load() {
-    const btn = $('refresh'); btn.disabled = true; btn.textContent = '↻ Updating…';
-    $('connection').textContent = 'Loading live feeds…';
-    try {
-      const settled = await Promise.allSettled(leagues.map(([code,name]) => fetchLeague(code,name)));
-      const good = settled.filter(x => x.status === 'fulfilled').flatMap(x => x.value);
-      const failed = settled.length - settled.filter(x => x.status === 'fulfilled').length;
-      const unique = new Map();
-      good.forEach(m => unique.set(m.id,m));
-      allMatches = [...unique.values()].sort((a,b) => {
-        if (a.live !== b.live) return a.live ? -1 : 1;
-        if (a.completed !== b.completed) return a.completed ? 1 : -1;
-        return a.date - b.date;
-      });
-      lastUpdated = new Date();
-      $('updatedAt').textContent = fmtTime(lastUpdated);
-      $('countMatches').textContent = allMatches.length;
-      $('liveMatches').textContent = allMatches.filter(m=>m.live).length;
-      $('connection').textContent = good.length ? `Online · ${leagues.length-failed}/${leagues.length} feeds` : 'Data unavailable';
-      $('connection').style.color = good.length ? 'var(--green)' : 'var(--red)';
-      populateLeagues();
-      render();
-      if (!good.length) throw new Error('No feeds returned data. Check your internet connection and try again.');
-      $('subTitle').textContent = `${allMatches.length} matches returned by the available competition feeds.`;
-      $('nextRefresh').textContent = 'Next automatic update in about 5 minutes.';
-    } catch (err) {
-      if (!allMatches.length) $('matches').innerHTML = `<div class="empty error">Could not load live football data. Check your internet connection, then tap “Refresh now”.<br><small>${esc(err.message || 'Network error')}</small></div>`;
-      $('connection').textContent = 'Offline / feed error';
-      $('connection').style.color = 'var(--red)';
-      $('subTitle').textContent = 'The online feed could not be reached.';
-      $('nextRefresh').textContent = 'Automatic retry remains enabled.';
-    } finally {
-      btn.disabled = false; btn.textContent = '↻ Refresh now';
-    }
-  }
-  function populateLeagues() {
-    const select = $('leagueFilter'), old = select.value;
-    const names = [...new Set(allMatches.map(m=>m.league))].sort();
-    select.innerHTML = '<option value="all">All competitions</option>' + names.map(n=>`<option value="${esc(n)}">${esc(n)}</option>`).join('');
-    if (names.includes(old)) select.value = old;
-  }
-  function render() {
-    const selectedLeague = $('leagueFilter').value;
-    const dateMode = $('dateFilter').value;
-    const today = localDateKey(new Date());
-    let matches = allMatches.filter(m => selectedLeague === 'all' || m.league === selectedLeague);
-    if (dateMode === 'today') matches = matches.filter(m => localDateKey(m.date) === today);
-    $('listTitle').textContent = dateMode === 'today' ? "Today's matches" : 'Upcoming & live matches';
-    if (!matches.length) {
-      $('matches').innerHTML = `<div class="empty">No matches found for this filter in the feeds right now. Try “All loaded dates” or refresh later.</div>`;
-      return;
-    }
-    $('matches').innerHTML = matches.map(m => {
-      const statusClass = m.live ? 'status live' : 'status';
-      return `<article class="match">
-        <div class="match-top"><span class="league">${esc(m.league)}</span><span class="${statusClass}">${esc(m.status)}</span></div>
-        <div class="teams">
-          <div class="team"><div class="team-name">${esc(m.home)}</div><small>${esc(m.homeRecord)}</small></div>
-          <div class="score">${esc(m.score)}</div>
-          <div class="team"><div class="team-name">${esc(m.away)}</div><small>${esc(m.awayRecord)}</small></div>
-        </div>
-        <div class="time">${m.completed ? 'Match completed' : m.live ? 'LIVE NOW' : `${esc(fmtDate(m.date))} · ${esc(fmtTime(m.date))} local time`}</div>
-        <div class="meta"><span>${esc(m.venue || 'Venue not listed')}</span><span>${m.live ? 'Live score feed' : m.completed ? 'Final score' : 'Scheduled fixture'}</span></div>
-      </article>`;
-    }).join('');
-  }
-  $('refresh').addEventListener('click', load);
-  $('todayBtn').addEventListener('click', () => { $('dateFilter').value = 'today'; render(); document.querySelector('.section-head').scrollIntoView({behavior:'smooth',block:'start'}); });
-  $('leagueFilter').addEventListener('change',render);
-  $('dateFilter').addEventListener('change',render);
-  load();
-  timer = setInterval(load, 5 * 60 * 1000);
-})();
-</script>
-</body>
-</html>
+(()=>{const LEAGUES=[["eng.1","English Premier League"],["esp.1","Spanish La Liga"],["ger.1","German Bundesliga"],["ita.1","Italian Serie A"],["fra.1","French Ligue 1"],["uefa.champions","UEFA Champions League"],["uefa.europa","UEFA Europa League"],["usa.1","MLS"],["ned.1","Dutch Eredivisie"],["por.1","Portuguese Primeira Liga"]];const CONTACT_EMAIL="";const $=id=>document.getElementById(id);let games=[],history=[];
+const dk=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`,df=d=>new Intl.DateTimeFormat(undefined,{weekday:'short',month:'short',day:'numeric'}).format(d),tf=d=>new Intl.DateTimeFormat(undefined,{hour:'2-digit',minute:'2-digit'}).format(d),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function parse(e,league){let c=e.competitions?.[0],a=c?.competitors||[],h=a.find(x=>x.homeAway==='home')||a[0],v=a.find(x=>x.homeAway==='away')||a[1];if(!h||!v)return null;let date=new Date(e.date||c?.date);if(isNaN(date))return null;let s=c?.status?.type||{},live=s.state==='in',done=!!s.completed;return{id:e.id,league,date,home:h.team.displayName||h.team.name,away:v.team.displayName||v.team.name,hid:String(h.team.id||''),aid:String(v.team.id||''),hs:h.score==null?null:Number(h.score),as:v.score==null?null:Number(v.score),status:live?(s.shortDetail||'LIVE'):done?'FT':(s.shortDetail||'Scheduled'),live,done,venue:c?.venue?.fullName||''}}
+async function feed(code,name,range){let u=`https://site.api.espn.com/apis/site/v2/sports/soccer/${encodeURIComponent(code)}/scoreboard?dates=${range}&limit=300`,r=await fetch(u,{cache:'no-store'});if(!r.ok)throw Error(name);let j=await r.json();return(j.events||[]).map(e=>parse(e,name)).filter(Boolean)}
+function recent(id,exclude){return history.filter(g=>g.id!==exclude&&g.done&&(g.hid===id||g.aid===id)).sort((a,b)=>b.date-a.date).slice(0,5).map(g=>{let home=g.hid===id,f=home?g.hs:g.as,against=home?g.as:g.hs;if(f==null||against==null)return null;return{letter:f>against?'W':f===against?'D':'L',gf:f,ga:against,opp:home?g.away:g.home,date:g.date,pts:f>against?3:f===against?1:0}}).filter(Boolean)}
+function h2h(g){return history.filter(x=>x.done&&((x.hid===g.hid&&x.aid===g.aid)||(x.hid===g.aid&&x.aid===g.hid))).sort((a,b)=>b.date-a.date).slice(0,5)}
+function preview(g){let h=recent(g.hid,g.id),a=recent(g.aid,g.id),meet=h2h(g);if(h.length<2||a.length<2)return `<div class="analysis"><b>Match analysis</b><p>Not enough recent results in the available feed for a fair comparison.</p></div>`;let hp=h.reduce((s,x)=>s+x.pts,0)/h.length,ap=a.reduce((s,x)=>s+x.pts,0)/a.length,edge=Math.abs(hp+.15-ap)<.35?'Recent form looks balanced.':hp+.15>ap?'Recent form gives the home team a small edge.':'Recent form gives the away team a small edge.';let hh=meet.length?`${meet.length} meeting(s) found. Latest: ${meet[0].home} ${meet[0].hs}-${meet[0].as} ${meet[0].away}.`:'No recent head-to-head data found.';return `<div class="analysis"><b>Match analysis</b><p>${edge}</p><p>${esc(g.home)} form: ${h.map(x=>x.letter).join(' ')} (${hp.toFixed(1)} pts/game). ${esc(g.away)} form: ${a.map(x=>x.letter).join(' ')} (${ap.toFixed(1)} pts/game).</p><p>H2H: ${esc(hh)}</p><p class="small">Descriptive estimate only; not a guaranteed prediction.</p></div>`}
+function card(g,feat=false){let sc=g.live||g.done?`${g.hs??'–'} - ${g.as??'–'}`:'VS',when=g.done?'Full time':g.live?'LIVE NOW':`${df(g.date)} · ${tf(g.date)} local time`;return `<article class="card ${feat?'featured':''}">${feat?'<p class="gold">★ DAILY FEATURE</p>':''}<div class="line"><b class="league">${esc(g.league)}</b><span class="tag ${g.live?'live':''}">${esc(g.status)}</span></div><div class="teams"><div class="team">${esc(g.home)}</div><div class="score">${sc}</div><div class="team">${esc(g.away)}</div></div><div class="kick">${esc(when)}</div><div class="line" style="margin-top:12px"><span>${esc(g.venue||'Venue not listed')}</span><span>${g.live?'Live score':g.done?'Final result':'Scheduled fixture'}</span></div>${preview(g)}</article>`}
+function render(){let next=games.filter(g=>!g.done&&!g.live).sort((a,b)=>a.date-b.date).slice(0,5),live=games.filter(g=>g.live);$('featCount').textContent=next.length;$('featured').innerHTML=next.length?next.map(g=>card(g,true)).join():'<div class="panel">No upcoming fixtures currently available.</div>';$('live').innerHTML=live.length?live.map(g=>card(g)).join():'<div class="panel">No live matches at this moment.</div>';let league=$('league').value,mode=$('date').value,today=dk(new Date()),list=games.filter(g=>(league==='all'||g.league===league)&&(mode==='all'||dk(g.date)===today));$('all').innerHTML=list.length?list.map(g=>card(g)).join():'<div class="panel">No fixtures for this filter. Try All loaded dates.</div>';let map=new Map();[...history,...games].forEach(g=>{map.set(g.hid,g.home);map.set(g.aid,g.away)});let old=$('team').value;$('team').innerHTML='<option value="">Select a team</option>'+[...map].filter(x=>x[0]&&x[1]).sort((a,b)=>a[1].localeCompare(b[1])).map(([id,n])=>`<option value="${id}">${esc(n)}</option>`).join();if(map.has(old))$('team').value=old;if(old)teamView(old)}
+function teamView(id){let n=$('team').selectedOptions[0]?.textContent||'Team',r=recent(id,'');$('teamInfo').innerHTML=r.length?`<h3 class="gold">${esc(n)} — recent form</h3><p>Form: <b>${r.map(x=>x.letter).join(' · ')}</b> · ${r.reduce((s,x)=>s+x.pts,0)} points from ${r.length} matches</p>`+r.map(x=>`<p>${df(x.date)}: ${esc(n)} ${x.gf}–${x.ga} ${esc(x.opp)} (${x.letter})</p>`).join():'<p>No recent completed results found in current feed history.</p>'}
+async function load(){let b=$('refresh');b.disabled=true;b.textContent='Updating…';$('connection').textContent='● Loading feeds…';let now=new Date(),from=new Date(now),to=new Date(now);from.setDate(from.getDate()-100);to.setDate(to.getDate()+10);let fmt=d=>`${d.getFullYear()}${String(d.getMonth()+1).padStart(2,'0')}${String(d.getDate()).padStart(2,'0')}`,range=fmt(from)+'-'+fmt(to);try{let res=await Promise.allSettled(LEAGUES.map(x=>feed(x[0],x[1],range))),ok=res.filter(x=>x.status==='fulfilled');let m=new Map();ok.flatMap(x=>x.value).forEach(g=>m.set(g.id,g));games=[...m.values()].sort((a,b)=>a.date-b.date);history=games.filter(g=>g.done);$('count').textContent=games.length;$('liveCount').textContent=games.filter(g=>g.live).length;$('connection').textContent=`● Online · ${ok.length}/${LEAGUES.length} feeds`;$('updated').textContent='Updated '+tf(new Date());let names=[...new Set(games.map(g=>g.league))].sort(),old=$('league').value;$('league').innerHTML='<option value="all">All competitions</option>'+names.map(n=>`<option>${esc(n)}</option>`).join();if(names.includes(old))$('league').value=old;render()}catch(e){$('connection').textContent='● Feed unavailable';$('updated').textContent='Check internet and refresh'}finally{b.disabled=false;b.textContent='↻ Refresh data'}}
+document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>{document.querySelectorAll('nav button').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.page').forEach(p=>p.classList.toggle('active',p.id===b.dataset.page))});$('refresh').onclick=load;$('league').onchange=render;$('date').onchange=render;$('team').onchange=e=>e.target.value?teamView(e.target.value):$('teamInfo').textContent='Select a team.';$('contactForm').onsubmit=e=>{e.preventDefault();if(!CONTACT_EMAIL){alert('Site owner: add your email address to CONTACT_EMAIL in index.html before publishing.');return}let body=encodeURIComponent(`Name: ${$('sender').value}\nEmail: ${$('email').value}\n\n${$('message').value}`);location.href=`mailto:${CONTACT_EMAIL}?subject=KOMMY%20Football%20Picks&body=${body}`};$('year').textContent=new Date().getFullYear();load();setInterval(load,300000)})();
+</script></body></html>
